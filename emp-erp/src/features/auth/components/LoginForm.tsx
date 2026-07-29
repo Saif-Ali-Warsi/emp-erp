@@ -5,8 +5,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 import { loginSchema } from "../validation/loginSchema";
 
+import { login } from "../services/authService";
+
 interface LoginFormData {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -19,8 +21,14 @@ function LoginForm() {
     resolver: yupResolver(loginSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log(data);
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const user = await login(data);
+
+      console.log(user);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -34,11 +42,10 @@ function LoginForm() {
       <h1>Login</h1>
 
       <Input
-        label="Email"
-        type="email"
-        placeholder="Enter email"
-        error={errors.email?.message}
-        {...register("email")}
+        label="Username"
+        placeholder="Enter username"
+        error={errors.username?.message}
+        {...register("username")}
       />
 
       <Input
