@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Button from "@/components/common/Button/Button";
 import Input from "@/components/common/Input/Input";
 import { useForm } from "react-hook-form";
@@ -6,6 +7,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { loginSchema } from "../validation/loginSchema";
 
 import { login } from "../services/authService";
+
+import { useNavigate } from "react-router-dom";
+
+import { toast } from "react-toastify";
 
 interface LoginFormData {
   username: string;
@@ -21,13 +26,26 @@ function LoginForm() {
     resolver: yupResolver(loginSchema),
   });
 
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+
   const onSubmit = async (data: LoginFormData) => {
     try {
+      setLoading(true);
+
       const user = await login(data);
 
-      console.log(user);
+      localStorage.setItem("user", JSON.stringify(user));
+
+      localStorage.setItem("token", user.accessToken);
+      toast.success("Login successful");
+
+      navigate("/dashboard");
     } catch (error) {
-      console.log(error);
+      toast.error("Invalid username or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,7 +74,9 @@ function LoginForm() {
         {...register("password")}
       />
 
-      <Button type="submit">Login</Button>
+      <Button type="submit" disabled={loading}>
+        {loading ? "Logging in.." : "Login"}
+      </Button>
     </form>
   );
 }
