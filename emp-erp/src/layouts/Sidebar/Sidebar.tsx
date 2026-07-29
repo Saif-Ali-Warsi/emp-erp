@@ -1,27 +1,30 @@
 import { NavLink } from "react-router-dom";
+import styles from "@/layouts/Sidebar/Sidebar.module.css";
 
 function Sidebar() {
   return (
-    <aside
-      style={{
-        width: "220px",
-        borderRight: "1px solid #ddd",
-        padding: "20px",
-        minHeight: "calc(100vh - 60px)",
-      }}
-    >
-      <nav
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "15px",
-        }}
-      >
-        <NavLink to="/dashboard">Dashboard</NavLink>
+    <aside className={styles.sidebar}>
+      <nav className={styles.nav}>
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) => (isActive ? styles.active : styles.link)}
+        >
+          Dashboard
+        </NavLink>
 
-        <NavLink to="/employees">Employees</NavLink>
+        <NavLink
+          to="/employees"
+          className={({ isActive }) => (isActive ? styles.active : styles.link)}
+        >
+          Employees
+        </NavLink>
 
-        <NavLink to="/employees/add">Add Employee</NavLink>
+        <NavLink
+          to="/employees/add"
+          className={({ isActive }) => (isActive ? styles.active : styles.link)}
+        >
+          Add Employee
+        </NavLink>
       </nav>
     </aside>
   );

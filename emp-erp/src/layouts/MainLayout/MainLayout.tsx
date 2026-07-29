@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Header from "@/layouts/Header/Header";
 import Sidebar from "@/layouts/Sidebar/Sidebar";
+import styles from "@/layouts/MainLayout/MainLayout.module.css";
 
 function Mainlayout() {
   return (
@@ -8,19 +9,10 @@ function Mainlayout() {
       <>
         <Header />
 
-        <div
-          style={{
-            display: "flex",
-          }}
-        >
+        <div className={styles.container}>
           <Sidebar />
 
-          <main
-            style={{
-              flex: 1,
-              padding: "20px",
-            }}
-          >
+          <main className={styles.main}>
             <Outlet />
           </main>
         </div>

@@ -1,0 +1,34 @@
+.sidebar {
+  width: 240px;
+  min-height: calc(100vh - 64px);
+
+  background: #f8fafc;
+
+  border-right: 1px solid #e2e8f0;
+
+  padding: 24px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.link,
+.active {
+  text-decoration: none;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #334155;
+  transition: 0.3s;
+}
+
+.link:hover {
+  background: #e2e8f0;
+}
+
+.active {
+  background: #2563eb;
+  color: white;
+}
