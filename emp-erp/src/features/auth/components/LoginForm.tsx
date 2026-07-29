@@ -1,8 +1,9 @@
-import { useState } from "react";
-
 import Button from "@/components/common/Button/Button";
 import Input from "@/components/common/Input/Input";
 import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+import { loginSchema } from "../validation/loginSchema";
 
 interface LoginFormData {
   email: string;
@@ -10,7 +11,13 @@ interface LoginFormData {
 }
 
 function LoginForm() {
-  const { register, handleSubmit } = useForm<LoginFormData>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: yupResolver(loginSchema),
+  });
 
   const onSubmit = (data: LoginFormData) => {
     console.log(data);
@@ -30,6 +37,7 @@ function LoginForm() {
         label="Email"
         type="email"
         placeholder="Enter email"
+        error={errors.email?.message}
         {...register("email")}
       />
 
@@ -37,6 +45,7 @@ function LoginForm() {
         label="Password"
         type="password"
         placeholder="Enter password"
+        error={errors.password?.message}
         {...register("password")}
       />
 
