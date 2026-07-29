@@ -2,35 +2,46 @@ import { useState } from "react";
 
 import Button from "@/components/common/Button/Button";
 import Input from "@/components/common/Input/Input";
+import { useForm } from "react-hook-form";
+
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
 function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit } = useForm<LoginFormData>();
+
+  const onSubmit = (data: LoginFormData) => {
+    console.log(data);
+  };
 
   return (
-    <div style={{ width: "400px", margin: "80px auto" }}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      style={{
+        width: "400px",
+        margin: "80px auto",
+      }}
+    >
       <h1>Login</h1>
 
       <Input
         label="Email"
-        name="email"
         type="email"
         placeholder="Enter email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      ></Input>
+        {...register("email")}
+      />
 
       <Input
         label="Password"
-        name="password"
         type="password"
         placeholder="Enter password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        {...register("password")}
       />
 
       <Button type="submit">Login</Button>
-    </div>
+    </form>
   );
 }
 

@@ -1,28 +1,11 @@
 import styles from "./Input.module.css";
 
-interface InputProps {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  name: string;
-  type?: "text" | "email" | "password" | "number";
-  placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
-  disabled?: boolean;
-  required?: boolean;
 }
 
-function Input({
-  label,
-  name,
-  type = "text",
-  placeholder,
-  value,
-  onChange,
-  error,
-  disabled = false,
-  required = false,
-}: InputProps) {
+function Input({ label, name, error, required, ...rest }: InputProps) {
   return (
     <div className={styles.formGroup}>
       <label htmlFor={name} className={styles.label}>
@@ -33,12 +16,8 @@ function Input({
       <input
         id={name}
         name={name}
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
         className={`${styles.input} ${error ? styles.errorInput : ""}`}
+        {...rest}
       />
 
       {error && <p className={styles.error}>{error}</p>}
