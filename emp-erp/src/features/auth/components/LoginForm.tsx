@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
+import useAuth from "@/hooks/useAuth";
+
 interface LoginFormData {
   username: string;
   password: string;
@@ -26,6 +28,8 @@ function LoginForm() {
     resolver: yupResolver(loginSchema),
   });
 
+  const { login: loginUser } = useAuth();
+
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -36,9 +40,8 @@ function LoginForm() {
 
       const user = await login(data);
 
-      localStorage.setItem("user", JSON.stringify(user));
+      loginUser(user);
 
-      localStorage.setItem("token", user.accessToken);
       toast.success("Login successful");
 
       navigate("/dashboard");
