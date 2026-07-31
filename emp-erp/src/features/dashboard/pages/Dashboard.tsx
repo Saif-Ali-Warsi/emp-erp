@@ -1,25 +1,37 @@
-import { useState } from "react";
-
-import Button from "@/components/common/Button/Button";
-import Input from "@/components/common/Input/Input";
+import { useState, useEffect } from "react";
+import { getEmployees } from "@/features/dashboard/services/dashboardService";
+import type { Employee } from "../types/types";
 
 function Dashboard() {
-  const [name, setName] = useState("");
+
+  const [employees, setEmployees] = useState<Employee[]>([]);
+
+  useEffect(() => {
+    loadEmployees();
+  });
+
+  async function loadEmployees() {
+    try {
+      const response = await getEmployees();
+
+      setEmployees(response.users);
+
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
       <h1>Dashboard Page</h1>
 
-      <Input
-        label="Employee Name"
-        name="employeeName"
-        placeholder="Enter employee name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-      ></Input>
-
-      <Button>SAVE</Button>
+      {employees.map((employee: Employee) => (
+        <p key={employee.id}>{employee.firstName}</p>
+      ))}
+     
     </>
+   
   );
 }
 

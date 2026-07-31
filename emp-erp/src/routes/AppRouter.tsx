@@ -20,30 +20,9 @@ function AppRouter() {
           </ProtectedRoute>
         }
       >
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/employees"
-          element={
-            <ProtectedRoute>
-              <Employees />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/employees/add"
-          element={
-            <ProtectedRoute>
-              <EmployeeForm />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/employees" element={<Employees />} />
+        <Route path="/employees/add" element={<EmployeeForm />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />

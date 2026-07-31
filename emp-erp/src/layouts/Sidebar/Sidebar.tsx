@@ -14,6 +14,7 @@ function Sidebar() {
 
         <NavLink
           to="/employees"
+          end
           className={({ isActive }) => (isActive ? styles.active : styles.link)}
         >
           Employees
@@ -21,6 +22,7 @@ function Sidebar() {
 
         <NavLink
           to="/employees/add"
+          
           className={({ isActive }) => (isActive ? styles.active : styles.link)}
         >
           Add Employee
