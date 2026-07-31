@@ -6,16 +6,44 @@ import Employees from "@/features/employees/pages/Employees";
 import EmployeeForm from "@/features/employees/pages/EmployeeForm";
 import NotFound from "@/pages/NotFound";
 import Mainlayout from "@/layouts/MainLayout/MainLayout";
+import ProtectedRoute from "./ProtectedRoute";
 
 function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
 
-      <Route element={<Mainlayout />}>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/employees" element={<Employees />} />
-        <Route path="/employees/add" element={<EmployeeForm />} />
+      <Route
+        element={
+          <ProtectedRoute>
+            <Mainlayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees"
+          element={
+            <ProtectedRoute>
+              <Employees />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/employees/add"
+          element={
+            <ProtectedRoute>
+              <EmployeeForm />
+            </ProtectedRoute>
+          }
+        />
       </Route>
 
       <Route path="*" element={<NotFound />} />
