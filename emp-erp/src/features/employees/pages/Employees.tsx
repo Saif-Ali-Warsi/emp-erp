@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getEmployees } from "../services/employeeService";
+import { deleteEmployee } from "../services/employeeService";
 import type { Employee } from "../types/employee";
 
 import Input from "@/components/common/Input/Input";
@@ -36,6 +37,26 @@ function Employees() {
   const paginatedEmployees = filteredEmployees.slice(firstIndex, lastIndex);
 
   const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
+
+  async function handleDelete(id: number) {
+    const confirm = window.confirm("are you sure?");
+
+    if (!confirm) return;
+
+    try {
+      await deleteEmployee(id);
+
+      setEmployees((prevEmployees) =>
+        prevEmployees.filter((employee) => employee.id !== id),
+      );
+
+      alert("employee deleted successfully");
+    } catch (error) {
+      console.error(error);
+
+      alert("failed to delete employee");
+    }
+  }
 
   async function loadEmployees() {
     try {
@@ -76,6 +97,9 @@ function Employees() {
       <table>
         <thead>
           <tr>
+            <th>VIEW</th>
+            <th>EDIT</th>
+            <th>DELETE</th>
             <th>ID</th>
             <th>Image</th>
             <th>Name</th>
@@ -88,8 +112,15 @@ function Employees() {
         <tbody>
           {paginatedEmployees.map((employee) => (
             <tr key={employee.id}>
-              <td>{employee.id}</td>
+              <td>
+                <button>VIEW</button>
+                <button>EDIT</button>
+                <button onClick={() => handleDelete(employee.id)}>
+                  DELETE
+                </button>
+              </td>
 
+              <td>{employee.id}</td>
               <td>
                 <img
                   src={employee.image}

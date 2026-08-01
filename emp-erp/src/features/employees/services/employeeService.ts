@@ -7,3 +7,9 @@ export async function getEmployees() {
 
   return response.data;
 }
+
+export async function deleteEmployee(id: number) {
+  const response = await axios.delete(`${BASE_URL}/users/${id}`)
+
+  return response.data;
+}
