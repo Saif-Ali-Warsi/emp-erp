@@ -9,4 +9,9 @@ export interface Employee {
     phone: string;
     username: string;
     image: string;
+    company: Company;
+}
+
+export interface Company {
+    department: string;
 }

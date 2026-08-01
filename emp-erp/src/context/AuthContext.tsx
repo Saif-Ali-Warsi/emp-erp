@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 
 interface User {
   id: number;
@@ -15,6 +15,7 @@ interface AuthContextType {
   login: (user: User) => void;
   logout: () => void;
   isAuthenticated: boolean;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -25,6 +26,7 @@ interface Props {
 
 function AuthProvider({ children }: Props) {
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -32,6 +34,8 @@ function AuthProvider({ children }: Props) {
     if (savedUser) {
       setUser(JSON.parse(savedUser));
     }
+
+    setIsLoading(false);
   }, []);
 
   const login = (user: User) => {
@@ -55,6 +59,7 @@ function AuthProvider({ children }: Props) {
         login,
         logout,
         isAuthenticated: !!user,
+        isLoading,
       }}
     >
       {children}
