@@ -3,6 +3,8 @@ import { getEmployees } from "../services/employeeService";
 import { deleteEmployee } from "../services/employeeService";
 import type { Employee } from "../types/employee";
 
+import { Link } from "react-router-dom";
+
 import { toast } from "react-toastify";
 
 import Input from "@/components/common/Input/Input";
@@ -60,7 +62,7 @@ function Employees() {
     }
   }
 
-  async function loadEmployees() {
+ async function loadEmployees() {
     try {
       setLoading(true);
       setError("");
@@ -115,7 +117,9 @@ function Employees() {
           {paginatedEmployees.map((employee) => (
             <tr key={employee.id}>
               <td>
-                <button>VIEW</button>
+                <button>
+                  <Link to={`/employees/${employee.id}`}>VIEW</Link>
+                </button>
                 <button>EDIT</button>
                 <button onClick={() => handleDelete(employee.id)}>
                   DELETE

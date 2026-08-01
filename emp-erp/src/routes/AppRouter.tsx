@@ -7,6 +7,7 @@ import EmployeeForm from "@/features/employees/pages/EmployeeForm";
 import NotFound from "@/pages/NotFound";
 import Mainlayout from "@/layouts/MainLayout/MainLayout";
 import ProtectedRoute from "./ProtectedRoute";
+import EmployeeDetails from "@/features/employees/pages/EmployeeDetails";
 
 function AppRouter() {
   return (
@@ -23,6 +24,7 @@ function AppRouter() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/employees" element={<Employees />} />
         <Route path="/employees/add" element={<EmployeeForm />} />
+        <Route path="/employees/:id" element={<EmployeeDetails />}></Route>
       </Route>
 
       <Route path="*" element={<NotFound />} />
