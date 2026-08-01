@@ -3,6 +3,8 @@ import { getEmployees } from "../services/employeeService";
 import { deleteEmployee } from "../services/employeeService";
 import type { Employee } from "../types/employee";
 
+import { toast } from "react-toastify";
+
 import Input from "@/components/common/Input/Input";
 
 function Employees() {
@@ -50,11 +52,11 @@ function Employees() {
         prevEmployees.filter((employee) => employee.id !== id),
       );
 
-      alert("employee deleted successfully");
+      toast.success("Employee Deleted Successfully");
     } catch (error) {
       console.error(error);
 
-      alert("failed to delete employee");
+      toast.error("Failed to delete employee");
     }
   }
 
