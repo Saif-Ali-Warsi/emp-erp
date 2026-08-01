@@ -11,15 +11,31 @@ function Employees() {
 
   const [search, setSearch] = useState("");
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const itemsPerPage = 10;
+
+  const lastIndex = currentPage * itemsPerPage;
+
+  const firstIndex = lastIndex - itemsPerPage;
+
   useEffect(() => {
     loadEmployees();
   }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
 
   const filteredEmployees = employees.filter((employee) => {
     const fullName = `${employee.firstName} ${employee.lastName}`.toLowerCase();
 
     return fullName.includes(search.toLowerCase());
   });
+
+  const paginatedEmployees = filteredEmployees.slice(firstIndex, lastIndex);
+
+  const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
 
   async function loadEmployees() {
     try {
@@ -70,7 +86,7 @@ function Employees() {
         </thead>
 
         <tbody>
-          {filteredEmployees.map((employee) => (
+          {paginatedEmployees.map((employee) => (
             <tr key={employee.id}>
               <td>{employee.id}</td>
 
@@ -96,6 +112,14 @@ function Employees() {
           ))}
         </tbody>
       </table>
+
+      <div>
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button key={index} onClick={() => setCurrentPage(index + 1)}>
+            {index + 1}
+          </button>
+        ))}
+      </div>
     </>
   );
 }
