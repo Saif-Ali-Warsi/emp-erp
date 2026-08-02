@@ -62,7 +62,7 @@ function Employees() {
     }
   }
 
- async function loadEmployees() {
+  async function loadEmployees() {
     try {
       setLoading(true);
       setError("");
@@ -117,10 +117,14 @@ function Employees() {
           {paginatedEmployees.map((employee) => (
             <tr key={employee.id}>
               <td>
-                <button>
-                  <Link to={`/employees/${employee.id}`}>VIEW</Link>
-                </button>
-                <button>EDIT</button>
+                <Link to={`/employees/${employee.id}`}>
+                  <button>VIEW</button>
+                </Link>
+
+                <Link to={`/employees/${employee.id}/edit`}>
+                  <button>EDIT</button>
+                </Link>
+                
                 <button onClick={() => handleDelete(employee.id)}>
                   DELETE
                 </button>
