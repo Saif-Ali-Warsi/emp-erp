@@ -32,3 +32,8 @@ export async function updateEmployee(
 
 }
 
+export async function createEmployee(data: EmployeeFormData) {
+  const response = await axios.post(`${BASE_URL}/users/add`, data)
+
+  return response.data
+}
