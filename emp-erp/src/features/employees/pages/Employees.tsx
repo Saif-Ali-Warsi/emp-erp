@@ -1,11 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { getEmployees } from "../services/employeeService";
 import { deleteEmployee } from "../services/employeeService";
 import type { Employee } from "../types/employee";
 
-import { Link } from "react-router-dom";
-
 import { toast } from "react-toastify";
+import EmployeeTable from "./EmployeeTable";
 
 import Input from "@/components/common/Input/Input";
 
@@ -42,13 +41,14 @@ function Employees() {
     });
   }, [employees, search]);
 
-  const paginatedEmployees = filteredEmployees.slice(firstIndex, lastIndex);
+  const paginatedEmployees = useMemo(() => {
+    return filteredEmployees.slice(firstIndex, lastIndex);
+  }, [filteredEmployees, firstIndex, lastIndex]);
 
   const totalPages = Math.ceil(filteredEmployees.length / itemsPerPage);
 
-  async function handleDelete(id: number) {
+  const handleDelete = useCallback(async (id: number) => {
     const confirm = window.confirm("are you sure?");
-
     if (!confirm) return;
 
     try {
@@ -64,7 +64,7 @@ function Employees() {
 
       toast.error("Failed to delete employee");
     }
-  }
+  }, []);
 
   async function loadEmployees() {
     try {
@@ -90,6 +90,8 @@ function Employees() {
     return <h2>{error}</h2>;
   }
 
+
+
   return (
     <>
       <h1>Employees</h1>
@@ -102,61 +104,11 @@ function Employees() {
         onChange={(e) => setSearch(e.target.value)}
       ></Input>
 
-      <table>
-        <thead>
-          <tr>
-            <th>VIEW</th>
-            <th>EDIT</th>
-            <th>DELETE</th>
-            <th>ID</th>
-            <th>Image</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Department</th>
-          </tr>
-        </thead>
 
-        <tbody>
-          {paginatedEmployees.map((employee) => (
-            <tr key={employee.id}>
-              <td>
-                <Link to={`/employees/${employee.id}`}>
-                  <button>VIEW</button>
-                </Link>
-
-                <Link to={`/employees/${employee.id}/edit`}>
-                  <button>EDIT</button>
-                </Link>
-
-                <button onClick={() => handleDelete(employee.id)}>
-                  DELETE
-                </button>
-              </td>
-
-              <td>{employee.id}</td>
-              <td>
-                <img
-                  src={employee.image}
-                  alt={employee.firstName}
-                  width={40}
-                  height={40}
-                />
-              </td>
-
-              <td>
-                {employee.firstName} {employee.lastName}
-              </td>
-
-              <td>{employee.email}</td>
-
-              <td>{employee.phone}</td>
-
-              <td>{employee.company.department}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <EmployeeTable
+        employees={paginatedEmployees}
+        onDelete={handleDelete}
+      ></EmployeeTable>
 
       <div>
         {Array.from({ length: totalPages }, (_, index) => (
