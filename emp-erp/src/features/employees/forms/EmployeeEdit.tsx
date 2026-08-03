@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import type { Employee } from "../types/employee";
-import { getEmployee } from "../services/employeeService";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { employeeSchema } from "../validation/employeeSchema";
+
+import useEmployee from "@/hooks/useEmployee";
 
 import type { EmployeeFormData } from "../types/employeeForm";
 
@@ -18,6 +18,11 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function EmployeeEdit() {
+  const { id } = useParams();
+  const { employee, loading, error } = useEmployee(id);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -29,25 +34,20 @@ function EmployeeEdit() {
 
   const navigate = useNavigate();
 
-  const { id } = useParams();
-
-  const [employee, setEmployee] = useState<Employee | null>(null);
-
-  const [loading, setLoading] = useState(false);
-
-  const [error, setError] = useState("");
-
   useEffect(() => {
-    if (id) {
-      loadEmployee();
-    }
-  }, [id]);
+  if (employee) {
+    reset({
+      firstName: employee.firstName,
+      lastName: employee.lastName,
+    });
+  }
+}, [employee, reset]);
 
   async function onSubmit(data: EmployeeFormData) {
     if (!id) return;
 
     try {
-      setLoading(true);
+      setIsSubmitting(true);
       await updateEmployee(id, data);
 
       toast.success("Employee update successfully.");
@@ -58,26 +58,7 @@ function EmployeeEdit() {
 
       toast.error("Failed to update employee");
     } finally {
-      setLoading(false);
-    }
-  }
-
-  async function loadEmployee() {
-    if (!id) return;
-
-    try {
-      setLoading(true);
-      setError("");
-
-      const response = await getEmployee(id);
-
-      setEmployee(response);
-      reset(response);
-    } catch (error) {
-      setError("Failed to load employee");
-      console.error(error);
-    } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   }
 
@@ -112,8 +93,8 @@ function EmployeeEdit() {
           {...register("lastName")}
         />
 
-        <Button type="submit" disabled={loading}>
-          {loading ? "Updating.." : "Update"}
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? "Updating.." : "Update"}
         </Button>
       </form>
     </>
