@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getEmployees } from "../services/employeeService";
 import { deleteEmployee } from "../services/employeeService";
 import type { Employee } from "../types/employee";
@@ -32,11 +32,15 @@ function Employees() {
     setCurrentPage(1);
   }, [search]);
 
-  const filteredEmployees = employees.filter((employee) => {
-    const fullName = `${employee.firstName} ${employee.lastName}`.toLowerCase();
+  // using useMemo for Filtering large arrays, Sorting, Expensive calculations
+  const filteredEmployees = useMemo(() => {
+    return employees.filter((employee) => {
+      const fullName =
+        `${employee.firstName} ${employee.lastName}`.toLowerCase();
 
-    return fullName.includes(search.toLowerCase());
-  });
+      return fullName.includes(search.toLowerCase());
+    });
+  }, [employees, search]);
 
   const paginatedEmployees = filteredEmployees.slice(firstIndex, lastIndex);
 
@@ -124,7 +128,7 @@ function Employees() {
                 <Link to={`/employees/${employee.id}/edit`}>
                   <button>EDIT</button>
                 </Link>
-                
+
                 <button onClick={() => handleDelete(employee.id)}>
                   DELETE
                 </button>
